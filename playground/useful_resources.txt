@@ -1,0 +1,5 @@
+- Use case of getting old tweets
+https://vicmora.github.io/blog/2017/02/20/twitter-sentiment-gather-data
+
+- Recommends using Quandl in getting stock data
+https://ntguardian.wordpress.com/2018/07/17/stock-data-analysis-python-v2/

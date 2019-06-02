@@ -1,4 +1,6 @@
 
 # directory
+**/.idea
 **/.ipynb_checkpoints
 **/scrap
+**/__pycache__

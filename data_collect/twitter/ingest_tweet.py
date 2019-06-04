@@ -49,13 +49,19 @@ def get_parsed_tweets_for_date(query,
     return tweet_df
 
 
-def get_tweets_for_query_and_date(query, date_str):
+def get_tweets_for_query_and_date(query, date_str, raise_error_on_empty=True):
     next_date = arrow.get(date_str).shift(days=1).strftime('%Y-%m-%d')
 
     tweetCriteria = got.manager.TweetCriteria().setQuerySearch(query) \
         .setSince(date_str) \
         .setUntil(next_date)
     tweets = got.manager.TweetManager.getTweets(tweetCriteria)
+
+    if raise_error_on_empty:
+        if len(tweets) == 0:
+            raise ValueError('Expected more than 0 tweets for query: {}, date: {}'.format(query,
+                                                                                          date_str))
+
     return tweets
 
 

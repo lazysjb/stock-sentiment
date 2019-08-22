@@ -4,13 +4,13 @@ import os
 
 import pandas as pd
 
-from config import STOCKTWITS_ROOT_DIR
+from config import STOCKDATA_ROOT_DIR, STOCKTWITS_ROOT_DIR
 
 
 _STOCK_TWIT_FILE_FORMAT = '{ticker}_{date_str}.json'
 _STOCK_TWIT_FILE_FORMAT_ALL = '{ticker}_*.json'
 
-_DEFAULT_COLS = [
+_STOCK_TWIT_DEFAULT_COLS = [
     'date_est',
     'created_at_est',
     'body',
@@ -18,6 +18,8 @@ _DEFAULT_COLS = [
     'entities.sentiment.basic',
     'links',
 ]
+
+_STOCK_DATA_FILE_FORMAT = '{ticker}.json'
 
 
 class StockTwitsFileReader:
@@ -29,7 +31,7 @@ class StockTwitsFileReader:
         return self.root_dir
 
     def get_subdir_for_ticker(self, ticker):
-        return os.path.join(self.root_dir, ticker)
+        return os.path.join(self.root_dir, 'raw', ticker)
 
     def get_all_files_for_ticker(self, ticker):
         subdir = self.get_subdir_for_ticker(ticker)
@@ -69,7 +71,7 @@ class StockTwitsFileReader:
         df = self.read_json_file_to_df(file_path)
 
         if cols == 'default':
-            df = df[_DEFAULT_COLS].copy()
+            df = df[_STOCK_TWIT_DEFAULT_COLS].copy()
         elif cols != 'all':
             df = df[cols].copy()
         return df
@@ -84,7 +86,50 @@ class StockTwitsFileReader:
         result_df = pd.concat(dfs, sort=True).reset_index(drop=True)
 
         if cols == 'default':
-            result_df = result_df[_DEFAULT_COLS].copy()
+            result_df = result_df[_STOCK_TWIT_DEFAULT_COLS].copy()
         elif cols != 'all':
             result_df = result_df[cols].copy()
         return result_df
+
+
+class StockDataFileReader:
+
+    def __init__(self, root_dir=STOCKDATA_ROOT_DIR):
+        self.root_dir = root_dir
+
+    def get_subdir(self, data_type='stock_data'):
+        if data_type == 'stock_data':
+            subdir = os.path.join(self.root_dir, 'stock_data')
+        elif data_type == 'meta':
+            subdir = os.path.join(self.root_dir, 'meta')
+        else:
+            raise ValueError('Incorrect data_type arg value of {}'.format(data_type))
+
+        return subdir
+
+    def get_stockdata_file_path(self, ticker, data_type='stock_data'):
+        file_path = os.path.join(self.get_subdir(data_type=data_type),
+                                 _STOCK_DATA_FILE_FORMAT.format(ticker=ticker))
+        return file_path
+
+    def read_stockdata_from_json(self, ticker):
+        file_path = self.get_stockdata_file_path(ticker, data_type='stock_data')
+        df = pd.read_json(file_path, orient='records', lines=True)
+
+        return df
+
+    def read_stockdata_in_range(self,
+                                ticker,
+                                start_date,
+                                end_date,
+                                columns=['date', 'adjusted close'],
+                                date_as_index=True):
+        df = self.read_stockdata_from_json(ticker)
+
+        df = df[(df['date'] >= start_date) & (df['date'] <= end_date)]
+        df = df[columns].copy()
+
+        if date_as_index:
+            df = df.set_index('date').sort_index()
+
+        return df

@@ -7,7 +7,16 @@ STOCKTWITS_TICKER_LIST = [
     'MSFT',     # Microsoft
     'TSLA',     # Tesla
     'SBUX',     # Starbucks
-    'BYND',     # Beyond Meat
+
+    # 2019 IPO Stocks
+    'BYND',  # Beyond Meat
+    'UBER',  # Uber
+    'LYFT',  # Lyft
+    'WORK',  # Slack
+    'ZM',  # Zoom
+    'PINS',  # Pinterest
+    'CHWY',  # Chewy
+    'CRWD',  # Crowdstrike
 
     # MID CAP STOCK SELECTION #
 

@@ -5,6 +5,7 @@ import os
 import pandas as pd
 
 from config import STOCKDATA_ROOT_DIR, STOCKTWITS_ROOT_DIR
+from util.ts_util import reindex_weekend_to_monday
 
 
 _STOCK_TWIT_FILE_FORMAT = '{ticker}_{date_str}.json'
@@ -30,8 +31,14 @@ class StockTwitsFileReader:
     def get_root_dir(self):
         return self.root_dir
 
-    def get_subdir_for_ticker(self, ticker):
-        return os.path.join(self.root_dir, 'raw', ticker)
+    def get_subdir_for_ticker(self, ticker, subdir_name='raw'):
+        if subdir_name == 'raw':
+            subdir = os.path.join(self.root_dir, subdir_name, ticker)
+        elif subdir_name == 'processed':
+            subdir = os.path.join(self.root_dir, subdir_name)
+        else:
+            raise ValueError('Unexpected subdir_name arg of {}'.format(subdir_name))
+        return subdir
 
     def get_all_files_for_ticker(self, ticker):
         subdir = self.get_subdir_for_ticker(ticker)
@@ -90,6 +97,22 @@ class StockTwitsFileReader:
         elif cols != 'all':
             result_df = result_df[cols].copy()
         return result_df
+
+    def read_daily_sentiment_summary_prelim(self, ticker):
+        subdir = os.path.join(self.get_subdir_for_ticker(ticker, subdir_name='processed'),
+                              'sentiment_summary_prelim')
+        file_path = os.path.join(subdir, '{ticker}_sentiment_summary.pkl'.format(ticker=ticker))
+        df = pd.read_pickle(file_path)
+        df.index = pd.to_datetime(df.index)
+        df = df.sort_index()
+        df = reindex_weekend_to_monday(df, agg_method='sum')
+
+        # Hack for BYND, start from 2019-05-01 (IPO)
+        # TODO: Perhaps do this differently
+        if ticker == 'BYND':
+            df = df.loc['2019-05-01':].copy()
+
+        return df
 
 
 class StockDataFileReader:

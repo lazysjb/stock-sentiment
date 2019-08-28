@@ -4,7 +4,7 @@ import os
 
 import pandas as pd
 
-from config import STOCKDATA_ROOT_DIR, STOCKTWITS_ROOT_DIR
+from config import STOCKDATA_ROOT_DIR, STOCKTWITS_ROOT_DIR, IPO_START_DATE_MAP
 from util.ts_util import reindex_weekend_to_monday
 
 
@@ -107,10 +107,12 @@ class StockTwitsFileReader:
         df = df.sort_index()
         df = reindex_weekend_to_monday(df, agg_method='sum')
 
-        # Hack for BYND, start from 2019-05-01 (IPO)
+        # Hack for ipo stocks
+        # for ex BYND, start from 2019-05-01 (IPO)
         # TODO: Perhaps do this differently
-        if ticker == 'BYND':
-            df = df.loc['2019-05-01':].copy()
+        if ticker in IPO_START_DATE_MAP:
+            ipo_start_date = IPO_START_DATE_MAP[ticker]
+            df = df.loc[ipo_start_date:].copy()
 
         return df
 

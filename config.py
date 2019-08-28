@@ -58,3 +58,14 @@ STOCKDATA_TICKER_LIST = STOCKTWITS_TICKER_LIST + [
     # SP500 ETF
     'SPY',
 ]
+
+IPO_START_DATE_MAP = {
+    'BYND': '2019-05-03',
+    'UBER': '2019-05-10',
+    'LYFT': '2019-03-29',
+    'WORK': '2019-06-21',
+    'ZM': '2019-04-18',
+    'PINS': '2019-04-18',
+    'CHWY': '2019-06-14',
+    'CRWD': '2019-06-14',
+}

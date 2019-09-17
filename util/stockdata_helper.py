@@ -1,10 +1,14 @@
-from config import STOCKDATA_TICKER_LIST
+from config import ETF_TICKER_TO_SECTOR, STOCKDATA_TICKER_LIST
 from util.file_util import StockDataFileReader
 from util.ts_util import get_nday_pct_return
 
 
 def get_stockdata_tickers():
     return STOCKDATA_TICKER_LIST
+
+
+def get_sector_etf_ticker_map():
+    return ETF_TICKER_TO_SECTOR
 
 
 def get_nday_returns_for_ticker(ticker,

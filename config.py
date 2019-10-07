@@ -8,6 +8,9 @@ STOCKDATA_ROOT_DIR = '/Users/seung-jae_bang/Personal/Research/Stock_Sentiment/da
 SP_500_COMPONENT_TICKER_FILE = ('/Users/seung-jae_bang/Personal/Research/'
                                 'Stock_Sentiment/ingest_code/data-ingest/'
                                 'data/sp_500_component.csv')
+SP_500_COMPONENT_SECTOR_MAP_FILE = ('/Users/seung-jae_bang/Personal/Research/'
+                                    'Stock_Sentiment/ingest_code/data-ingest/'
+                                    'data/sp_500_component_sector_map_wiki.csv')
 
 # For some reason I can't query the below tickers in StockTwits
 STOCKTWITS_BAD_TICKER_LIST = [
@@ -80,15 +83,33 @@ ETF_TICKER_TO_SECTOR = {
     'XLF': 'Financials',
     'XLU': 'Utilities',
     'XLP': 'Consumer Staples',
-    'XLK': 'Technology',
-    'XLI': 'Industrial',
+    'XLK': 'Information Technology',
+    'XLI': 'Industrials',
     'XLB': 'Materials',
     'XLC': 'Communication Services',
     'XLV': 'Health Care',
     'XLY': 'Consumer Discretionary',
     'XLRE': 'Real Estate',
     'XLE': 'Energy',
+
+    'SPY': 'All',
 }
+
+GICS_SECTOR_LIST = [
+    'Consumer Staples',
+    'Real Estate',
+    'Industrials',
+    'Information Technology',
+    'Communication Services',
+    'Energy',
+    'Materials',
+    'Consumer Discretionary',
+    'Financials',
+    'Health Care',
+    'Utilities',
+
+    'All',  # Not really a sector but just my notation of include all sp500
+]
 
 SECTOR_ETF_TICKERS = [
     # Sector ETFs

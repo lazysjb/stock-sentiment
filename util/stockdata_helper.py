@@ -1,4 +1,9 @@
-from config import ETF_TICKER_TO_SECTOR, STOCKDATA_TICKER_LIST
+import funcy
+import pandas as pd
+
+from config import (
+    ETF_TICKER_TO_SECTOR, GICS_SECTOR_LIST, SP_500_COMPONENT_SECTOR_MAP_FILE,
+    STOCKDATA_TICKER_LIST, STOCKTWITS_BAD_TICKER_LIST)
 from util.file_util import StockDataFileReader
 from util.ts_util import get_nday_pct_return
 
@@ -9,6 +14,35 @@ def get_stockdata_tickers():
 
 def get_sector_etf_ticker_map():
     return ETF_TICKER_TO_SECTOR
+
+
+def get_etf_ticker_for_sector(sector):
+    etf_ticker = funcy.flip(get_sector_etf_ticker_map())[sector]
+    return etf_ticker
+
+
+def get_component_tickers_for_sector(sector,
+                                     exclude_bad_stocktwit_tickers=True):
+    sp500_sector_info = get_sp500_sector_info(exclude_bad_stocktwit_tickers)
+
+    if sector == 'All':
+        ticker_list = sp500_sector_info['ticker'].tolist()
+    else:
+        ticker_list = sp500_sector_info.loc[
+            sp500_sector_info['GICS_Sector'] == sector, 'ticker'].tolist()
+    return ticker_list
+
+
+def get_sp500_sector_info(exclude_bad_stocktwit_tickers=True):
+    df = pd.read_csv(SP_500_COMPONENT_SECTOR_MAP_FILE)
+
+    if exclude_bad_stocktwit_tickers:
+        df = df[~df['ticker'].isin(STOCKTWITS_BAD_TICKER_LIST)].copy()
+    return df
+
+
+def get_gics_sector_list():
+    return GICS_SECTOR_LIST
 
 
 def get_nday_returns_for_ticker(ticker,

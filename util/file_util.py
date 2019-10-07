@@ -98,7 +98,9 @@ class StockTwitsFileReader:
             result_df = result_df[cols].copy()
         return result_df
 
-    def read_daily_sentiment_summary_prelim(self, ticker):
+    def read_daily_sentiment_summary_prelim(self, ticker,
+                                            start_date='2018-01-01',
+                                            end_date='2019-08-10'):
         subdir = os.path.join(self.get_subdir_for_ticker(ticker, subdir_name='processed'),
                               'sentiment_summary_prelim')
         file_path = os.path.join(subdir, '{ticker}_sentiment_summary.pkl'.format(ticker=ticker))
@@ -113,6 +115,8 @@ class StockTwitsFileReader:
         if ticker in IPO_START_DATE_MAP:
             ipo_start_date = IPO_START_DATE_MAP[ticker]
             df = df.loc[ipo_start_date:].copy()
+        else:
+            df = df.loc[start_date:end_date].copy()
 
         return df
 

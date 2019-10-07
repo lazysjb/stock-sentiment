@@ -59,9 +59,9 @@ def resample_weekly(daily_df,
     return result
 
 
-def rolling_weekly(daily_df,
-                   window='7D',
-                   agg_method='sum'):
+def rolling_nday(daily_df,
+                 window='7D',
+                 agg_method='sum'):
     # TODO(SJ): perhaps custom aggregation with using 5 business days
     #   may be more appropriate, but for now just using 7D window
     temp = daily_df.rolling(window)

@@ -41,8 +41,14 @@ def get_sp500_sector_info(exclude_bad_stocktwit_tickers=True):
     return df
 
 
-def get_gics_sector_list():
-    return GICS_SECTOR_LIST
+def get_gics_sector_list(exclude_comms=True):
+    """Since communication sector etf was created 2018-07, skip this"""
+    if exclude_comms:
+        sector_list = [s for s in GICS_SECTOR_LIST if s != 'Communication Services']
+    else:
+        sector_list = GICS_SECTOR_LIST
+
+    return sector_list
 
 
 def get_nday_returns_for_ticker(ticker,

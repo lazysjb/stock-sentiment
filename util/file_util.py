@@ -102,7 +102,7 @@ class StockTwitsFileReader:
                                             start_date='2018-01-01',
                                             end_date='2019-08-10'):
         subdir = os.path.join(self.get_subdir_for_ticker(ticker, subdir_name='processed'),
-                              'sentiment_summary_prelim')
+                              'sentiment_summary_prelim_new')
         file_path = os.path.join(subdir, '{ticker}_sentiment_summary.pkl'.format(ticker=ticker))
         df = pd.read_pickle(file_path)
         df.index = pd.to_datetime(df.index)

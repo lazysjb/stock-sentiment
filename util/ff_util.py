@@ -34,7 +34,7 @@ def read_ff_factors_daily(filepath=FF_DAILY_RETURNS_FILEPATH,
 
 
 def read_momentum_factor_daily(filepath=FF_DAILY_MOMENTUM_FILEPATH):
-    mom_df = pd.read_csv(FF_DAILY_MOMENTUM_FILEPATH,
+    mom_df = pd.read_csv(filepath,
                          skiprows=14,
                          header=None,
                          names=['date', 'Mom'])

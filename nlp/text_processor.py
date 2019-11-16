@@ -50,7 +50,7 @@ def token_is_cash_tag(token):
 
 def token_matches_ticker(token, ticker):
     """Returns true if token matches ticker"""
-    return token.lower() == ticker.lower()
+    return (token.lower() == ticker.lower()) or (token.lower() == '$' + ticker.lower())
 
 
 def token_is_punct(token):

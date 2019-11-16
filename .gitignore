@@ -5,3 +5,6 @@
 **/scrap
 **/__pycache__
 **/.DS_Store
+
+*dummy.py
+*tokenize_practice.ipynb
